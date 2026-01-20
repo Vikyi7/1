@@ -1,0 +1,49 @@
+{
+  "name": "yixin",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "缘心福 - 极简艺术应用",
+  "scripts": {
+    "dev": "vite",
+    "dev:https": "powershell -NoProfile -Command \"$env:VITE_HTTPS='true'; vite\"",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "ios:init": "npm install @capacitor/core @capacitor/ios @capacitor/cli && npx cap init && npx cap add ios",
+    "ios:sync": "npm run build && npx cap sync ios",
+    "ios:open": "npx cap open ios",
+    "ios:build": "npm run ios:sync && npm run ios:open",
+    "android:init": "npm install @capacitor/android && npx cap add android",
+    "android:sync": "npm run build && npx cap sync android",
+    "android:open": "npx cap open android",
+    "android:build": "npm run android:sync && npm run android:open"
+  },
+  "dependencies": {
+    "framer-motion": "^10.16.16",
+    "html5-qrcode": "^2.3.8",
+    "lucide-react": "^0.294.0",
+    "qrcode.react": "^4.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.20.1",
+    "socket.io-client": "^4.5.4"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@typescript-eslint/eslint-plugin": "^6.14.0",
+    "@typescript-eslint/parser": "^6.14.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.23",
+    "caniuse-lite": "^1.0.30001764",
+    "eslint": "^8.55.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "postcss": "^8.4.32",
+    "tailwindcss": "^3.3.6",
+    "typescript": "^5.2.2",
+    "vite": "^5.0.8",
+    "vite-plugin-mkcert": "^1.17.9",
+    "vite-plugin-pwa": "^0.17.4"
+  }
+}

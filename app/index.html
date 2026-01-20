@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="缘心福" />
+    <meta name="description" content="缘心福 - 极简艺术应用，探索莆田地区" />
+    <link rel="apple-touch-icon" href="/vite.svg" />
+    <title>缘心福</title>
+    <script>
+      // 在页面渲染前立即设置主题，防止闪白
+      (function() {
+        const THEME_STORAGE_KEY = 'puyuan_theme';
+        const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+        let isDark = false;
+        
+        if (savedTheme === 'dark') {
+          isDark = true;
+        } else if (!savedTheme) {
+          // 如果没有保存的主题，检查系统偏好
+          if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            isDark = true;
+          }
+        }
+        
+        if (isDark) {
+          document.documentElement.classList.add('dark');
+          document.body.style.backgroundColor = '#060606';
+        } else {
+          document.body.style.backgroundColor = '#ffffff';
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
