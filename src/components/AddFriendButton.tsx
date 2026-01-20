@@ -3,7 +3,6 @@ import { motion } from 'framer-motion'
 import { UserPlus, Check, Loader2 } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { useChat } from '../contexts/ChatContext'
-import { apiService } from '../services/api'
 
 interface AddFriendButtonProps {
   targetUserId: string
