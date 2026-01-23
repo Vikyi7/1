@@ -51,34 +51,56 @@ class ApiService {
     const contentType = response.headers.get('content-type') || '';
     const text = await response.text();
 
+    if (!response.ok) {
+      // 网络错误或服务器错误
+      if (!response.status || response.status === 0) {
+        throw new Error('无法连接到服务器，请检查网络连接或服务器是否已启动');
+      }
+      throw new Error(`服务器错误 (${response.status})，请稍后重试`);
+    }
+
     if (!contentType.includes('application/json')) {
       // 很可能是服务器未启动、路径错误，或返回了 HTML 错误页
-      throw new Error('服务器返回的不是 JSON，请检查消息服务器是否已启动，或接口地址是否正确');
+      throw new Error('服务器连接失败，请检查后端服务是否已启动');
     }
 
     try {
       return JSON.parse(text);
     } catch (e) {
-      throw new Error('解析服务器响应失败，请稍后重试');
+      throw new Error('服务器响应格式错误，请稍后重试');
     }
   }
 
   async register(email: string, password: string, name: string) {
-    const response = await fetch(`${API_BASE_URL}/api/register`, {
-      method: 'POST',
-      headers: this.getHeaders(),
-      body: JSON.stringify({ email, password, name }),
-    });
-    return this.parseJson(response);
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/register`, {
+        method: 'POST',
+        headers: this.getHeaders(),
+        body: JSON.stringify({ email, password, name }),
+      });
+      return this.parseJson(response);
+    } catch (error: any) {
+      if (error.message.includes('fetch')) {
+        throw new Error('无法连接到服务器，请检查后端服务是否已启动');
+      }
+      throw error;
+    }
   }
 
   async login(email: string, password: string) {
-    const response = await fetch(`${API_BASE_URL}/api/login`, {
-      method: 'POST',
-      headers: this.getHeaders(),
-      body: JSON.stringify({ email, password }),
-    });
-    return this.parseJson(response);
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/login`, {
+        method: 'POST',
+        headers: this.getHeaders(),
+        body: JSON.stringify({ email, password }),
+      });
+      return this.parseJson(response);
+    } catch (error: any) {
+      if (error.message.includes('fetch')) {
+        throw new Error('无法连接到服务器，请检查后端服务是否已启动');
+      }
+      throw error;
+    }
   }
 
   async searchUsers(query: string, userId: string) {

@@ -78,7 +78,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
       return { success: false, error: result.error || '注册失败' }
     } catch (error: any) {
-      return { success: false, error: error.message || '注册失败' }
+      const errorMessage = error.message || '注册失败'
+      // 如果是网络错误，提供更友好的提示
+      if (errorMessage.includes('无法连接') || errorMessage.includes('fetch')) {
+        return { success: false, error: '无法连接到服务器，请确保后端服务已启动（localhost:3000）' }
+      }
+      return { success: false, error: errorMessage }
     }
   }
 
@@ -112,7 +117,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
       return { success: false, error: result.error || '登录失败' }
     } catch (error: any) {
-      return { success: false, error: error.message || '登录失败' }
+      const errorMessage = error.message || '登录失败'
+      // 如果是网络错误，提供更友好的提示
+      if (errorMessage.includes('无法连接') || errorMessage.includes('fetch')) {
+        return { success: false, error: '无法连接到服务器，请确保后端服务已启动（localhost:3000）' }
+      }
+      return { success: false, error: errorMessage }
     }
   }
 
