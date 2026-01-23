@@ -10,6 +10,7 @@ import Chat from './pages/Chat'
 import Login from './pages/Login'
 import Navigation from './components/Navigation'
 import Header from './components/Header'
+import ScrollToTop from './components/ScrollToTop'
 import { CreditProvider } from './contexts/CreditContext'
 import { ThemeProvider } from './contexts/ThemeContext'
 import { TraceCodeProvider } from './contexts/TraceCodeContext'
@@ -27,6 +28,7 @@ function App() {
           <TraceCodeProvider>
             <ChatProvider>
               <Router basename={basename}>
+                <ScrollToTop />
           <div className="min-h-screen bg-white dark:bg-[#060606] text-black dark:text-white transition-colors duration-300" style={{ 
             position: 'fixed',
             top: 0,
