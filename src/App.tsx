@@ -17,8 +17,8 @@ import { ChatProvider } from './contexts/ChatContext'
 import { AuthProvider } from './contexts/AuthContext'
 
 function App() {
-  // Vercel 使用根路径，GitHub Pages 使用 /-/
-  const basename = import.meta.env.VERCEL ? '/' : (import.meta.env.PROD ? '/-/' : '/')
+  // Vercel 使用根路径，GitHub Pages 使用 /1/
+  const basename = import.meta.env.VERCEL ? '/' : (import.meta.env.PROD ? '/1/' : '/')
   
   return (
     <ThemeProvider>
