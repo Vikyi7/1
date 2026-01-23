@@ -31,14 +31,3 @@ const ChatIcon = ({ size, className }: { size: number; className?: string }) => 
 
 export default ChatIcon
 
-
-
-
-
-
-
-
-
-
-
-
