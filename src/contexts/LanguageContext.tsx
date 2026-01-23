@@ -219,6 +219,12 @@ const translations: Record<Language, Record<string, string>> = {
     'error.passwordMismatch': '两次输入的密码不一致',
     'error.loginFailed': '登录失败，请检查用户名和密码',
     'error.registerFailed': '注册失败，请稍后重试',
+    
+    // 图库
+    'gallery.location': '地理位置',
+    'gallery.area': '面积',
+    'gallery.population': '人口',
+    'gallery.detailedCategories': '详细分类',
   },
   'en': {
     // 通用
@@ -427,6 +433,12 @@ const translations: Record<Language, Record<string, string>> = {
     'error.passwordMismatch': 'Passwords do not match',
     'error.loginFailed': 'Login failed, please check your username and password',
     'error.registerFailed': 'Registration failed, please try again later',
+    
+    // 图库
+    'gallery.location': 'Location',
+    'gallery.area': 'Area',
+    'gallery.population': 'Population',
+    'gallery.detailedCategories': 'Detailed Categories',
   },
 }
 

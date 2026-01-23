@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
 import { X, MapPin, Building, Waves } from 'lucide-react'
+import { useLanguage } from '../contexts/LanguageContext'
 
 interface CategoryItem {
   name: string
@@ -25,6 +26,7 @@ interface Region {
 }
 
 const Gallery = () => {
+  const { t } = useLanguage()
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
 
   const regions: Region[] = [
@@ -499,7 +501,7 @@ const Gallery = () => {
                       <MapPin size={18} className="text-black/50 dark:text-white/50" />
                     </div>
                     <div>
-                      <p className="text-xs text-black/40 dark:text-white/40 mb-0.5">地理位置</p>
+                      <p className="text-xs text-black/40 dark:text-white/40 mb-0.5">{t('gallery.location')}</p>
                       <p className="text-sm font-medium text-black/80 dark:text-white/80">{regions[selectedIndex].location}</p>
                     </div>
                   </div>
@@ -508,7 +510,7 @@ const Gallery = () => {
                       <Building size={18} className="text-black/50 dark:text-white/50" />
                     </div>
                     <div>
-                      <p className="text-xs text-black/40 dark:text-white/40 mb-0.5">面积</p>
+                      <p className="text-xs text-black/40 dark:text-white/40 mb-0.5">{t('gallery.area')}</p>
                       <p className="text-sm font-medium text-black/80 dark:text-white/80">{regions[selectedIndex].area}</p>
                     </div>
                   </div>
@@ -517,7 +519,7 @@ const Gallery = () => {
                       <Waves size={18} className="text-black/50 dark:text-white/50" />
                     </div>
                     <div>
-                      <p className="text-xs text-black/40 dark:text-white/40 mb-0.5">人口</p>
+                      <p className="text-xs text-black/40 dark:text-white/40 mb-0.5">{t('gallery.population')}</p>
                       <p className="text-sm font-medium text-black/80 dark:text-white/80">{regions[selectedIndex].population}</p>
                     </div>
                   </div>
@@ -525,7 +527,7 @@ const Gallery = () => {
 
                 {/* 详细分类 */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-medium text-black/80 dark:text-white/80 mb-4">详细分类</h3>
+                  <h3 className="text-lg font-medium text-black/80 dark:text-white/80 mb-4">{t('gallery.detailedCategories')}</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {regions[selectedIndex].categories.map((category, idx) => (
                       <motion.div
