@@ -1,16 +1,8 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Home from './pages/Home'
-import About from './pages/About'
-import Gallery from './pages/Gallery'
-import TraceCode from './pages/TraceCode'
-import Profile from './pages/Profile'
-import UserProfile from './pages/UserProfile'
-import Settings from './pages/Settings'
-import Chat from './pages/Chat'
-import Login from './pages/Login'
+import { BrowserRouter as Router } from 'react-router-dom'
 import Navigation from './components/Navigation'
 import Header from './components/Header'
 import ScrollToTop from './components/ScrollToTop'
+import AnimatedRoutes from './components/AnimatedRoutes'
 import { CreditProvider } from './contexts/CreditContext'
 import { ThemeProvider } from './contexts/ThemeContext'
 import { TraceCodeProvider } from './contexts/TraceCodeContext'
@@ -54,17 +46,7 @@ function App() {
               boxSizing: 'border-box',
               minHeight: '100%'
             }}>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/gallery" element={<Gallery />} />
-                <Route path="/trace" element={<TraceCode />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/user/:userId" element={<UserProfile />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="/chat" element={<Chat />} />
-                <Route path="/login" element={<Login />} />
-              </Routes>
+              <AnimatedRoutes />
             </main>
             <Navigation />
           </div>
