@@ -36,6 +36,12 @@ jobs:
         env:
           NODE_ENV: production
 
+      - name: Copy verification file to root
+        run: |
+          if [ -f "public/2f371932e77a9f02c0f3e0b9351cc1db.txt" ]; then
+            cp public/2f371932e77a9f02c0f3e0b9351cc1db.txt dist/2f371932e77a9f02c0f3e0b9351cc1db.txt
+          fi
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
