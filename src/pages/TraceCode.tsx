@@ -3,6 +3,7 @@ import { QrCode, CheckCircle2, Shield, FileText, ArrowRight, AlertCircle, X } fr
 import { useState, useEffect, useRef } from 'react'
 import { useCredit } from '../contexts/CreditContext'
 import { useTraceCode } from '../contexts/TraceCodeContext'
+import { useLanguage } from '../contexts/LanguageContext'
 
 // 动态导入 Html5Qrcode，避免 SSR 问题
 let Html5Qrcode: any = null
@@ -15,6 +16,7 @@ if (typeof window !== 'undefined') {
 const TraceCode = () => {
   const { addCredit } = useCredit()
   const { isCodeUsed, markCodeAsUsed } = useTraceCode()
+  const { t } = useLanguage()
   const [scannedCode, setScannedCode] = useState<string | null>(null)
   const [traceData, setTraceData] = useState<any>(null)
   const [inputCode, setInputCode] = useState<string>('')
@@ -59,14 +61,14 @@ const TraceCode = () => {
       const isSecureContext =
         window.location.protocol === 'https:' || window.location.hostname === 'localhost'
       if (!isSecureContext) {
-        setScanError('当前是 HTTP 访问，出于安全原因无法打开摄像头，请使用 HTTPS 地址或在电脑本机 (localhost) 访问后再尝试扫描')
+        setScanError(t('trace.scanErrorHttp'))
         return
       }
     }
 
     // 检查是否支持摄像头访问
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      setScanError('您的设备不支持摄像头访问，请使用 HTTPS 或 localhost 访问')
+      setScanError(t('trace.scanErrorNoCamera'))
       return
     }
 
@@ -81,7 +83,7 @@ const TraceCode = () => {
       const scannerElement = document.getElementById(scannerId)
       
       if (!scannerElement) {
-        throw new Error('扫描容器未找到，请刷新页面重试')
+        throw new Error(t('trace.scanErrorNotFound'))
       }
 
       // 创建扫描器实例
@@ -107,7 +109,7 @@ const TraceCode = () => {
       )
     } catch (err: any) {
       console.error('扫描启动失败:', err)
-      const errorMsg = err.message || '无法启动摄像头，请检查权限设置'
+      const errorMsg = err.message || t('trace.scanError')
       setScanError(errorMsg)
       setIsScanning(false)
       await stopScanning()
@@ -158,7 +160,7 @@ const TraceCode = () => {
     
     // 验证码格式
     if (!isValidTraceCode(codeUpper)) {
-      setInvalidCodeError('无效的溯源码，只支持App生成的测试码')
+      setInvalidCodeError(t('trace.invalidCode'))
       setScannedCode(null)
       setTraceData(null)
       setIsCodeAlreadyUsed(false)
@@ -279,8 +281,8 @@ const TraceCode = () => {
               whileTap={{ scale: 0.98 }}
             >
               <QrCode size={80} className="text-black/30 dark:text-white/30 mb-4" />
-              <p className="text-black/50 dark:text-white/50 text-sm">点击扫描溯源码</p>
-              <p className="text-black/30 dark:text-white/30 text-xs mt-2">或输入溯源码</p>
+              <p className="text-black/50 dark:text-white/50 text-sm">{t('trace.scan')}</p>
+              <p className="text-black/30 dark:text-white/30 text-xs mt-2">{t('trace.input')}</p>
             </motion.div>
             ) : (
               <motion.div
@@ -316,7 +318,7 @@ const TraceCode = () => {
                       }}
                       className="w-full px-3 py-1.5 bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 rounded-lg text-xs hover:bg-red-200 dark:hover:bg-red-900/60 transition-colors"
                     >
-                      关闭
+                      {t('trace.close')}
                     </button>
                   </div>
                 )}
@@ -342,7 +344,7 @@ const TraceCode = () => {
                     })
                   }, 300)
                 }}
-                placeholder="请输入溯源码..."
+                placeholder={t('trace.inputPlaceholder')}
                 className="w-full px-6 py-4 pr-20 border border-black/20 dark:border-white/20 rounded-2xl font-light text-black dark:text-white placeholder:text-black/30 dark:placeholder:text-white/30 focus:outline-none focus:border-black/40 dark:focus:border-white/40 transition-colors bg-white dark:bg-[#060606]"
                 style={{
                   scrollMarginTop: 'calc(56px + env(safe-area-inset-top) + 20px)',
@@ -397,18 +399,18 @@ const TraceCode = () => {
               <div className="p-6 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-2xl flex items-center gap-4">
                 <AlertCircle className="text-amber-600 dark:text-amber-400" size={24} />
                 <div>
-                  <p className="font-medium text-amber-900 dark:text-amber-100">溯源码已验证</p>
-                  <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">溯源码: {scannedCode}</p>
-                  <p className="text-xs text-amber-600 dark:text-amber-400 mt-2">此码已使用，无法再次获得积分，但可以查看溯源信息</p>
+                  <p className="font-medium text-amber-900 dark:text-amber-100">{t('trace.scanSuccess')}</p>
+                  <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">{t('trace.code')}: {scannedCode}</p>
+                  <p className="text-xs text-amber-600 dark:text-amber-400 mt-2">{t('trace.codeUsed')}</p>
                 </div>
               </div>
             ) : (
               <div className="p-6 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-2xl flex items-center gap-4">
                 <CheckCircle2 className="text-green-600 dark:text-green-400" size={24} />
                 <div>
-                  <p className="font-medium text-green-900 dark:text-green-100">溯源验证成功</p>
-                  <p className="text-sm text-green-700 dark:text-green-300 mt-1">溯源码: {scannedCode}</p>
-                  <p className="text-xs text-green-600 dark:text-green-400 mt-2">已获得 10 心缘积分</p>
+                  <p className="font-medium text-green-900 dark:text-green-100">{t('trace.querySuccess')}</p>
+                  <p className="text-sm text-green-700 dark:text-green-300 mt-1">{t('trace.code')}: {scannedCode}</p>
+                  <p className="text-xs text-green-600 dark:text-green-400 mt-2">{t('trace.earnedCredits')} 10</p>
                 </div>
               </div>
             )}
@@ -422,17 +424,17 @@ const TraceCode = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <Shield className="text-green-600" size={24} />
-                  <span className="text-lg font-medium text-green-600">信得过</span>
+                  <span className="text-lg font-medium text-green-600">{t('trace.trusted')}</span>
                 </div>
               </div>
               
               <div className="grid grid-cols-2 gap-4 mt-6">
                 <div>
-                  <p className="text-xs text-black/40 dark:text-white/40 mb-1">信誉等级</p>
+                  <p className="text-xs text-black/40 dark:text-white/40 mb-1">{t('trace.trustLevel')}</p>
                   <p className="text-2xl font-light text-black dark:text-white">{traceData.trustLevel}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-black/40 dark:text-white/40 mb-1">信用积分</p>
+                  <p className="text-xs text-black/40 dark:text-white/40 mb-1">{t('trace.creditScore')}</p>
                   <p className="text-2xl font-light text-black dark:text-white">{traceData.creditScore}</p>
                 </div>
               </div>
@@ -442,7 +444,7 @@ const TraceCode = () => {
             <div className="p-6 border border-black/10 dark:border-white/10 rounded-2xl bg-white dark:bg-[#060606] transition-colors duration-300">
               <div className="flex items-center gap-2 mb-3">
                 <FileText size={20} className="text-black/60 dark:text-white/60" />
-                <h4 className="font-medium text-black dark:text-white">区块链存证</h4>
+                <h4 className="font-medium text-black dark:text-white">{t('trace.blockchainInfo')}</h4>
               </div>
               <p className="text-xs text-black/40 dark:text-white/40 font-mono break-all">
                 {traceData.blockchainHash}
@@ -451,7 +453,7 @@ const TraceCode = () => {
 
             {/* 溯源凭证列表 */}
             <div className="space-y-4">
-              <h4 className="text-xl font-light mb-4 text-black dark:text-white">溯源凭证</h4>
+              <h4 className="text-xl font-light mb-4 text-black dark:text-white">{t('trace.certificates')}</h4>
               {traceData.certificates.map((cert: any, index: number) => (
                 <motion.div
                   key={index}
@@ -471,11 +473,11 @@ const TraceCode = () => {
                       </div>
                     </div>
                     <span className="px-3 py-1 bg-green-100 text-green-700 text-xs rounded-full">
-                      已认证
+                      {t('trace.verified')}
                     </span>
                   </div>
                   <p className="text-xs text-black/40 dark:text-white/40 font-mono break-all">
-                    哈希: {cert.hash}
+                    {t('trace.hash')}: {cert.hash}
                   </p>
                 </motion.div>
               ))}
@@ -491,7 +493,7 @@ const TraceCode = () => {
               }}
               className="w-full py-3 border border-black/20 dark:border-white/20 rounded-full font-light hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-black dark:text-white"
             >
-              重新查询
+              {t('trace.queryAgain')}
             </motion.button>
           </motion.div>
         )}
@@ -502,7 +504,7 @@ const TraceCode = () => {
           className="mt-12 p-6 bg-black/5 dark:bg-white/5 rounded-2xl transition-colors duration-300"
         >
           <p className="text-sm text-black/60 dark:text-white/60 leading-relaxed">
-            通过扫描溯源码，您可以查看商品的区块链存证信息，包括原料来源、制作过程、质检报告等关键环节的哈希存证，确保消费的透明度和可信度。
+            {t('trace.description')}
           </p>
         </motion.div>
       </motion.div>

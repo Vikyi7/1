@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useChat } from '../contexts/ChatContext'
 import { useAuth } from '../contexts/AuthContext'
+import { useLanguage } from '../contexts/LanguageContext'
 import { User, Search, Copy, Trash2, RotateCcw } from 'lucide-react'
 import ChatIcon from '../components/ChatIcon'
 import { MessageDebugger } from '../components/MessageDebugger'
@@ -21,6 +22,7 @@ const Chat = () => {
     approveFriendRequest,
   } = useChat()
   const { isAuthenticated, user } = useAuth()
+  const { t, language } = useLanguage()
   const [showAddFriend, setShowAddFriend] = useState(false)
   const [newFriendName, setNewFriendName] = useState('')
   const [addFriendError, setAddFriendError] = useState<string>('')
@@ -73,7 +75,7 @@ const Chat = () => {
     setSearchResults([])
 
     if (!isAuthenticated || !user) {
-      setAddFriendError('请先登录后再搜索')
+      setAddFriendError(t('chat.loginRequired'))
       setSearching(false)
       return
     }
@@ -98,10 +100,10 @@ const Chat = () => {
         })
         setRequestStatuses(statuses)
       } else {
-        setAddFriendError('未找到相关用户')
+        setAddFriendError(t('chat.noResults'))
       }
     } catch (error: any) {
-      setAddFriendError(error.message || '搜索失败')
+      setAddFriendError(error.message || t('chat.error'))
     } finally {
       setSearching(false)
     }
@@ -110,7 +112,7 @@ const Chat = () => {
   // 发送好友申请
   const handleSendFriendRequest = async (targetUserId: string, targetUserName: string) => {
     if (!isAuthenticated || !user) {
-      setAddFriendError('请先登录')
+      setAddFriendError(t('chat.loginRequired'))
       return
     }
 
@@ -139,18 +141,18 @@ const Chat = () => {
         }))
       } else {
         // 根据错误信息更新状态
-        if (result.error?.includes('已是好友')) {
+        if (result.error?.includes('已是好友') || result.error?.includes('already friend')) {
           setRequestStatuses(prev => ({ ...prev, [targetUserId]: 'already_friend' }))
-        } else if (result.error?.includes('申请已发送')) {
+        } else if (result.error?.includes('申请已发送') || result.error?.includes('already sent')) {
           setRequestStatuses(prev => ({ ...prev, [targetUserId]: 'already_sent' }))
         } else {
           setRequestStatuses(prev => ({ ...prev, [targetUserId]: 'idle' }))
-          setAddFriendError(result.error || '发送失败')
+          setAddFriendError(result.error || t('chat.error'))
         }
       }
     } catch (error: any) {
       setRequestStatuses(prev => ({ ...prev, [targetUserId]: 'idle' }))
-      setAddFriendError(error.message || '发送失败')
+      setAddFriendError(error.message || t('chat.error'))
     }
   }
 
@@ -158,11 +160,15 @@ const Chat = () => {
     const date = new Date(timestamp)
     const now = new Date()
     const isToday = date.toDateString() === now.toDateString()
+    const isYesterday = new Date(now.getTime() - 86400000).toDateString() === date.toDateString()
     
     if (isToday) {
-      return date.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })
+      return date.toLocaleTimeString(language === 'en' ? 'en-US' : 'zh-CN', { hour: '2-digit', minute: '2-digit' })
     }
-    return date.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' })
+    if (isYesterday) {
+      return t('chat.yesterday')
+    }
+    return date.toLocaleDateString(language === 'en' ? 'en-US' : 'zh-CN', { month: 'short', day: 'numeric' })
   }
 
   const currentFriend = friends.find(f => f.id === currentChatId)
@@ -355,7 +361,7 @@ const Chat = () => {
                       className="relative z-50 mb-4 p-4 bg-black/5 dark:bg-white/5 rounded-2xl border border-black/10 dark:border-white/10"
                     >
                     <div className="flex items-center justify-between mb-3">
-                      <h3 className="text-sm font-medium text-black dark:text-white">添加好友</h3>
+                      <h3 className="text-sm font-medium text-black dark:text-white">{t('chat.addFriend')}</h3>
                       <button
                         onClick={() => {
                           setShowAddFriend(false)
@@ -386,7 +392,7 @@ const Chat = () => {
                               setSearchResults([])
                             }}
                             onKeyPress={(e) => e.key === 'Enter' && handleSearchUser()}
-                            placeholder="输入好友邮箱或姓名..."
+                            placeholder={t('chat.searchPlaceholder')}
                             className="flex-1 bg-transparent text-sm md:text-base text-black dark:text-white placeholder:text-black/40 dark:placeholder:text-white/40 focus:outline-none"
                             autoFocus
                           />
@@ -456,11 +462,11 @@ const Chat = () => {
                                       : 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 cursor-default'
                                   }`}
                                 >
-                                  {status === 'idle' && '添加'}
-                                  {status === 'sending' && '发送中...'}
-                                  {status === 'sent' && '已发送'}
-                                  {status === 'already_sent' && '等待验证'}
-                                  {status === 'already_friend' && '已是好友'}
+                                  {status === 'idle' && t('chat.add')}
+                                  {status === 'sending' && t('chat.sending')}
+                                  {status === 'sent' && t('chat.requestSent')}
+                                  {status === 'already_sent' && t('chat.waitingVerification')}
+                                  {status === 'already_friend' && t('chat.alreadyFriend')}
                                 </motion.button>
                               </motion.div>
                             )
@@ -486,7 +492,7 @@ const Chat = () => {
                   className="mb-4 p-4 rounded-2xl border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5"
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-black dark:text-white">新的好友申请</span>
+                    <span className="text-sm font-medium text-black dark:text-white">{t('chat.newFriendRequest')}</span>
                   </div>
                   <div className="space-y-2">
                     {incomingRequests
@@ -502,7 +508,7 @@ const Chat = () => {
                             </div>
                             <div>
                               <p className="text-sm text-black dark:text-white">{r.fromName}</p>
-                              <p className="text-xs text-black/40 dark:text-white/40">请求添加你为好友</p>
+                              <p className="text-xs text-black/40 dark:text-white/40">{t('chat.requestToAddYou')}</p>
                             </div>
                           </div>
                           <button
@@ -514,7 +520,7 @@ const Chat = () => {
                             }}
                             className="px-3 py-1 rounded-full bg-black dark:bg-white text-white dark:text-black text-xs hover:bg-black/80 dark:hover:bg-white/80 transition-colors"
                           >
-                            通过
+                            {t('chat.approve')}
                           </button>
                         </div>
                       ))}
@@ -530,8 +536,8 @@ const Chat = () => {
                   className="flex flex-col items-center justify-center py-16"
                 >
                   <ChatIcon size={64} className="text-black/20 dark:text-white/20 mb-4" />
-                  <p className="text-black/50 dark:text-white/50 text-sm">暂无好友</p>
-                  <p className="text-black/30 dark:text-white/30 text-xs mt-2">点击右上角添加好友</p>
+                  <p className="text-black/50 dark:text-white/50 text-sm">{t('chat.noFriends')}</p>
+                  <p className="text-black/30 dark:text-white/30 text-xs mt-2">{t('chat.clickToAddFriend')}</p>
                 </motion.div>
               ) : (
                 <motion.div layout>
@@ -574,7 +580,7 @@ const Chat = () => {
                             <div className="flex items-center gap-2 flex-shrink-0">
                               {friend.status === 'pending' && (
                                 <span className="px-2 py-0.5 rounded-full text-[10px] bg-yellow-500/10 text-yellow-500 border border-yellow-500/40">
-                                  待通过
+                                  {t('chat.waitingApproval')}
                                 </span>
                               )}
                               {friend.lastMessageTime && (
@@ -605,16 +611,16 @@ const Chat = () => {
                 <div className="flex flex-col items-center justify-center h-full text-center">
                   <ChatIcon size={48} className="text-black/20 dark:text-white/20 mb-3" />
                   <p className="text-sm text-black/60 dark:text-white/60 mb-2">
-                    已发送好友申请，等待对方通过后即可开始聊天
+                    {t('chat.requestSentWaiting')}
                   </p>
                   <p className="text-xs text-black/40 dark:text-white/40">
-                    通过前无法发送消息
+                    {t('chat.cannotSendBeforeApproval')}
                   </p>
                 </div>
               ) : currentMessages.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-16">
                   <ChatIcon size={48} className="text-black/20 dark:text-white/20 mb-3" />
-                  <p className="text-black/50 dark:text-white/50 text-sm">开始聊天吧</p>
+                  <p className="text-black/50 dark:text-white/50 text-sm">{t('chat.startChat')}</p>
                 </div>
               ) : (
                 <>
@@ -666,7 +672,7 @@ const Chat = () => {
                             >
                               {message.isRevoked ? (
                                 <p className="text-sm text-black/40 dark:text-white/40 italic">
-                                  已撤回
+                                  {t('chat.revoke')}
                                 </p>
                               ) : (
                                 <p className="text-sm leading-relaxed whitespace-pre-wrap break-words">
@@ -724,7 +730,7 @@ const Chat = () => {
                         className="w-full px-4 py-2 text-left text-sm text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 flex items-center gap-2"
                       >
                         <Copy size={16} />
-                        复制
+                        {t('chat.copy')}
                       </button>
                     )}
                     <button
@@ -732,7 +738,7 @@ const Chat = () => {
                       className="w-full px-4 py-2 text-left text-sm text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 flex items-center gap-2"
                     >
                       <Trash2 size={16} />
-                      删除
+                      {t('chat.delete')}
                     </button>
                     {canRevoke && (
                       <button
@@ -740,7 +746,7 @@ const Chat = () => {
                         className="w-full px-4 py-2 text-left text-sm text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 flex items-center gap-2"
                       >
                         <RotateCcw size={16} />
-                        撤回
+                        {t('chat.revoke')}
                       </button>
                     )}
                   </>

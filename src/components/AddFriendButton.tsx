@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { UserPlus, Check, Loader2 } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { useChat } from '../contexts/ChatContext'
+import { useLanguage } from '../contexts/LanguageContext'
 
 interface AddFriendButtonProps {
   targetUserId: string
@@ -15,6 +16,7 @@ type RequestStatus = 'idle' | 'sending' | 'sent' | 'error' | 'already_friend' | 
 export const AddFriendButton = ({ targetUserId, targetUserName, className = '' }: AddFriendButtonProps) => {
   const { user, isAuthenticated } = useAuth()
   const { friends, sendFriendRequest } = useChat()
+  const { t } = useLanguage()
   const [requestStatus, setRequestStatus] = useState<RequestStatus>('idle')
   const [errorMessage, setErrorMessage] = useState<string>('')
 
@@ -43,7 +45,7 @@ export const AddFriendButton = ({ targetUserId, targetUserName, className = '' }
 
   const handleClick = async () => {
     if (!user || !isAuthenticated) {
-      setErrorMessage('请先登录')
+      setErrorMessage(t('chat.loginRequired'))
       return
     }
 
@@ -57,7 +59,7 @@ export const AddFriendButton = ({ targetUserId, targetUserName, className = '' }
     try {
       const result = await sendFriendRequest(
         { id: user.id, name: user.name },
-        { id: targetUserId, name: targetUserName || '用户' }
+        { id: targetUserId, name: targetUserName || t('profile.title') }
       )
 
       if (result.success) {
@@ -68,18 +70,18 @@ export const AddFriendButton = ({ targetUserId, targetUserName, className = '' }
         }))
       } else {
         setRequestStatus('error')
-        setErrorMessage(result.error || '发送失败')
+        setErrorMessage(result.error || t('chat.error'))
         
         // 根据错误信息更新状态
-        if (result.error?.includes('已是好友')) {
+        if (result.error?.includes('已是好友') || result.error?.includes('already friend')) {
           setRequestStatus('already_friend')
-        } else if (result.error?.includes('申请已发送')) {
+        } else if (result.error?.includes('申请已发送') || result.error?.includes('already sent')) {
           setRequestStatus('already_sent')
         }
       }
     } catch (error: any) {
       setRequestStatus('error')
-      setErrorMessage(error.message || '发送失败，请重试')
+      setErrorMessage(error.message || t('chat.error'))
     }
   }
 
@@ -95,7 +97,7 @@ export const AddFriendButton = ({ targetUserId, targetUserName, className = '' }
             className={`${baseClasses} bg-black/20 dark:bg-white/20 text-black/60 dark:text-white/60 cursor-not-allowed`}
           >
             <Loader2 size={18} className="animate-spin" />
-            <span>发送中...</span>
+            <span>{t('chat.sending')}</span>
           </motion.button>
         )
 
@@ -107,7 +109,7 @@ export const AddFriendButton = ({ targetUserId, targetUserName, className = '' }
             className={`${baseClasses} bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/20 cursor-default`}
           >
             <Check size={18} />
-            <span>已发送</span>
+            <span>{t('chat.requestSent')}</span>
           </motion.button>
         )
 
@@ -118,7 +120,7 @@ export const AddFriendButton = ({ targetUserId, targetUserName, className = '' }
             className={`${baseClasses} bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 cursor-default`}
           >
             <Check size={18} />
-            <span>已是好友</span>
+            <span>{t('chat.alreadyFriend')}</span>
           </motion.button>
         )
 
@@ -131,7 +133,7 @@ export const AddFriendButton = ({ targetUserId, targetUserName, className = '' }
             className={`${baseClasses} bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20 hover:bg-red-500/20`}
           >
             <UserPlus size={18} />
-            <span>重试</span>
+            <span>{t('chat.retry')}</span>
           </motion.button>
         )
 
@@ -144,7 +146,7 @@ export const AddFriendButton = ({ targetUserId, targetUserName, className = '' }
             className={`${baseClasses} bg-black dark:bg-white text-white dark:text-black hover:bg-black/80 dark:hover:bg-white/80`}
           >
             <UserPlus size={18} />
-            <span>加好友</span>
+            <span>{t('chat.addFriend')}</span>
           </motion.button>
         )
     }

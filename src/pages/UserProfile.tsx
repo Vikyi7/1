@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { User, Mail, ArrowLeft, Loader2 } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
+import { useLanguage } from '../contexts/LanguageContext'
 import { AddFriendButton } from '../components/AddFriendButton'
 import { apiService } from '../services/api'
 
@@ -16,6 +17,7 @@ const UserProfile = () => {
   const { userId } = useParams<{ userId: string }>()
   const navigate = useNavigate()
   const { user: currentUser } = useAuth()
+  const { t } = useLanguage()
   const [profileUser, setProfileUser] = useState<UserProfileData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string>('')
@@ -23,7 +25,7 @@ const UserProfile = () => {
   useEffect(() => {
     const loadUserProfile = async () => {
       if (!userId) {
-        setError('用户ID无效')
+        setError(t('userProfile.invalidId'))
         setLoading(false)
         return
       }
@@ -46,10 +48,10 @@ const UserProfile = () => {
             name: result.user.name,
           })
         } else {
-          setError(result.error || '用户不存在')
+          setError(result.error || t('userProfile.notFound'))
         }
       } catch (err: any) {
-        setError(err.message || '加载用户信息失败')
+        setError(err.message || t('userProfile.error'))
       } finally {
         setLoading(false)
       }
@@ -86,7 +88,7 @@ const UserProfile = () => {
       <div className="min-h-full flex items-center justify-center bg-white dark:bg-[#060606]">
         <div className="flex flex-col items-center gap-4">
           <Loader2 size={32} className="animate-spin text-black/60 dark:text-white/60" />
-          <p className="text-sm text-black/50 dark:text-white/50">加载中...</p>
+          <p className="text-sm text-black/50 dark:text-white/50">{t('userProfile.loading')}</p>
         </div>
       </div>
     )
@@ -96,12 +98,12 @@ const UserProfile = () => {
     return (
       <div className="min-h-full flex items-center justify-center bg-white dark:bg-[#060606]">
         <div className="text-center">
-          <p className="text-lg text-black dark:text-white mb-4">{error || '用户不存在'}</p>
+          <p className="text-lg text-black dark:text-white mb-4">{error || t('userProfile.notFound')}</p>
           <button
             onClick={() => navigate(-1)}
             className="px-4 py-2 bg-black dark:bg-white text-white dark:text-black rounded-xl"
           >
-            返回
+            {t('userProfile.back')}
           </button>
         </div>
       </div>

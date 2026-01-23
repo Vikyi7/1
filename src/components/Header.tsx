@@ -2,10 +2,12 @@ import { useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowLeft, UserPlus } from 'lucide-react'
 import { useChat } from '../contexts/ChatContext'
+import { useLanguage } from '../contexts/LanguageContext'
 
 const Header = () => {
   const location = useLocation()
   const { friends, currentChatId, setCurrentChatId } = useChat()
+  const { t } = useLanguage()
 
   const isChatRoute = location.pathname === '/chat'
   const currentFriend = isChatRoute && currentChatId
@@ -20,16 +22,16 @@ const Header = () => {
       return currentFriend.name
     }
 
-    if (path === '/') return '缘心福'
-    if (path === '/trace') return '溯源码'
-    if (path === '/gallery') return '莆田地区'
-    if (path === '/chat') return '消息'
-    if (path === '/about') return '关于缘心福'
-    if (path === '/profile') return '我'
-    if (path === '/settings') return '设置'
-    if (path === '/login') return '登录'
-    if (path.startsWith('/user/')) return '用户资料'
-    return '缘心福'
+    if (path === '/') return t('header.appName')
+    if (path === '/trace') return t('header.trace')
+    if (path === '/gallery') return t('header.gallery')
+    if (path === '/chat') return t('header.chat')
+    if (path === '/about') return t('header.about')
+    if (path === '/profile') return t('header.profile')
+    if (path === '/settings') return t('header.settings')
+    if (path === '/login') return t('header.login')
+    if (path.startsWith('/user/')) return t('header.userProfile')
+    return t('header.appName')
   }
 
   return (
