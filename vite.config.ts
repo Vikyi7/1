@@ -11,7 +11,7 @@ export default defineConfig({
     mkcert(), // 启用 HTTPS
     VitePWA({
       registerType: 'autoUpdate', // 自动更新 Service Worker
-      includeAssets: ['LOGO.png'],
+      includeAssets: ['vite.svg'],
       manifest: {
         name: '缘心福',
         short_name: '缘心福',
@@ -24,22 +24,16 @@ export default defineConfig({
         scope: '/1/',
         icons: [
           {
-            src: 'LOGO.png',
-            sizes: '192x192',
-            type: 'image/png',
-            purpose: 'any maskable'
-          },
-          {
-            sizes: '192x192',
             src: 'pwa-192x192.png',
+            sizes: '192x192',
             type: 'image/png',
-            purpose: 'any maskable'
+            purpose: 'any'
           },
           {
-            sizes: '512x512',
             src: 'pwa-512x512.png',
+            sizes: '512x512',
             type: 'image/png',
-            purpose: 'any maskable'
+            purpose: 'any'
           }
         ]
       },
