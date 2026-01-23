@@ -3,11 +3,13 @@ import { ArrowLeft, Bell, Moon, Globe, Shield, QrCode, Copy, Check, Info } from 
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { useTheme } from '../contexts/ThemeContext'
+import { useLanguage } from '../contexts/LanguageContext'
 import { useTraceCode } from '../contexts/TraceCodeContext'
 
 const Settings = () => {
   const navigate = useNavigate()
   const { isDark, toggleTheme } = useTheme()
+  const { language, setLanguage, t } = useLanguage()
   const { generateTestCodes } = useTraceCode()
   const [notifications, setNotifications] = useState(true)
   const [testCodes, setTestCodes] = useState<string[]>([])
@@ -46,18 +48,18 @@ const Settings = () => {
         className="max-w-4xl mx-auto"
       >
         {/* 返回按钮 */}
-        <motion.button
+          <motion.button
           variants={itemVariants}
           onClick={() => navigate('/profile')}
           className="mb-8 flex items-center gap-2 text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white transition-colors"
         >
           <ArrowLeft size={20} />
-          <span>返回</span>
+          <span>{t('common.back')}</span>
         </motion.button>
 
         {/* 标题区域 */}
         <motion.div variants={itemVariants} className="mb-12">
-          <h1 className="text-5xl md:text-7xl font-light mb-4 text-black dark:text-white">设置</h1>
+          <h1 className="text-5xl md:text-7xl font-light mb-4 text-black dark:text-white">{t('settings.title')}</h1>
           <div className="h-px bg-black/20 dark:bg-white/20 w-24" />
         </motion.div>
 
@@ -74,8 +76,8 @@ const Settings = () => {
                   <Bell size={20} className="text-black/60 dark:text-white/60" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-medium mb-1 text-black dark:text-white">通知</h3>
-                  <p className="text-sm text-black/50 dark:text-white/50">接收应用通知和提醒</p>
+                  <h3 className="text-lg font-medium mb-1 text-black dark:text-white">{t('settings.notifications')}</h3>
+                  <p className="text-sm text-black/50 dark:text-white/50">{t('settings.notifications.desc')}</p>
                 </div>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
@@ -101,8 +103,8 @@ const Settings = () => {
                   <Moon size={20} className="text-black/60 dark:text-white/60" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-medium mb-1 text-black dark:text-white">深色模式</h3>
-                  <p className="text-sm text-black/50 dark:text-white/50">切换深色主题</p>
+                  <h3 className="text-lg font-medium mb-1 text-black dark:text-white">{t('settings.darkMode')}</h3>
+                  <p className="text-sm text-black/50 dark:text-white/50">{t('settings.darkMode.desc')}</p>
                 </div>
               </div>
               <button
@@ -130,13 +132,17 @@ const Settings = () => {
                 <Globe size={20} className="text-black/60 dark:text-white/60" />
               </div>
               <div className="flex-1">
-                <h3 className="text-lg font-medium mb-1 text-black dark:text-white">语言</h3>
-                <p className="text-sm text-black/50 dark:text-white/50">选择应用语言</p>
+                <h3 className="text-lg font-medium mb-1 text-black dark:text-white">{t('settings.language')}</h3>
+                <p className="text-sm text-black/50 dark:text-white/50">{t('settings.language.desc')}</p>
               </div>
-              <select className="px-4 py-2 border border-black/20 dark:border-white/20 rounded-xl bg-transparent dark:bg-transparent text-sm focus:outline-none focus:border-black/40 dark:focus:border-white/40 text-black dark:text-white">
-                <option>简体中文</option>
-                <option>繁體中文</option>
-                <option>English</option>
+              <select
+                value={language}
+                onChange={(e) => setLanguage(e.target.value as 'zh-CN' | 'zh-TW' | 'en')}
+                className="px-4 py-2 border border-black/20 dark:border-white/20 rounded-xl bg-transparent dark:bg-transparent text-sm focus:outline-none focus:border-black/40 dark:focus:border-white/40 text-black dark:text-white"
+              >
+                <option value="zh-CN">简体中文</option>
+                <option value="zh-TW">繁體中文</option>
+                <option value="en">English</option>
               </select>
             </div>
           </motion.div>
@@ -151,8 +157,8 @@ const Settings = () => {
                 <Shield size={20} className="text-black/60 dark:text-white/60" />
               </div>
               <div>
-                <h3 className="text-lg font-medium mb-1 text-black dark:text-white">隐私与安全</h3>
-                <p className="text-sm text-black/50 dark:text-white/50">管理隐私设置</p>
+                <h3 className="text-lg font-medium mb-1 text-black dark:text-white">{t('settings.privacy')}</h3>
+                <p className="text-sm text-black/50 dark:text-white/50">{t('settings.privacy.desc')}</p>
               </div>
             </div>
           </motion.div>
@@ -167,8 +173,8 @@ const Settings = () => {
                 <QrCode size={20} className="text-black/60 dark:text-white/60" />
               </div>
               <div className="flex-1">
-                <h3 className="text-lg font-medium mb-1 text-black dark:text-white">测试溯源码</h3>
-                <p className="text-sm text-black/50 dark:text-white/50">生成测试用的溯源码（一物一码）</p>
+                <h3 className="text-lg font-medium mb-1 text-black dark:text-white">{t('settings.testCodes')}</h3>
+                <p className="text-sm text-black/50 dark:text-white/50">{t('settings.testCodes.desc')}</p>
               </div>
             </div>
             <button
@@ -178,7 +184,7 @@ const Settings = () => {
               }}
               className="w-full py-3 border border-black/20 dark:border-white/20 rounded-xl font-light hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-black dark:text-white"
             >
-              生成 5 个测试码
+              {t('settings.generateCodes')}
             </button>
             <AnimatePresence>
               {testCodes.length > 0 && (
@@ -229,8 +235,8 @@ const Settings = () => {
                 <Info size={20} className="text-black/60 dark:text-white/60" />
               </div>
               <div className="flex-1">
-                <h3 className="text-lg font-medium mb-1 text-black dark:text-white">关于</h3>
-                <p className="text-sm text-black/50 dark:text-white/50">了解缘心福的设计理念</p>
+                <h3 className="text-lg font-medium mb-1 text-black dark:text-white">{t('settings.about')}</h3>
+                <p className="text-sm text-black/50 dark:text-white/50">{t('settings.about.desc')}</p>
               </div>
             </div>
           </motion.div>
@@ -242,7 +248,7 @@ const Settings = () => {
           className="mt-12 p-6 bg-black/5 dark:bg-white/5 rounded-2xl text-center transition-colors duration-300"
         >
           <p className="text-sm text-black/50 dark:text-white/50 mb-2">缘心福</p>
-          <p className="text-xs text-black/40 dark:text-white/40">版本 1.0.0</p>
+          <p className="text-xs text-black/40 dark:text-white/40">{t('settings.version')} 1.0.0</p>
         </motion.div>
       </motion.div>
     </div>

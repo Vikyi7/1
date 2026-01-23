@@ -6,6 +6,7 @@ import { Home, MapPin, User, QrCode, Send, UserPlus, X, Check } from 'lucide-rea
 import ChatIcon from './ChatIcon'
 import { useChat } from '../contexts/ChatContext'
 import { useAuth } from '../contexts/AuthContext'
+import { useLanguage } from '../contexts/LanguageContext'
 
 const Navigation = () => {
   const [mounted, setMounted] = useState(false)
@@ -14,6 +15,7 @@ const Navigation = () => {
   const location = useLocation()
   const { currentChatId, sendMessage, friends, incomingRequests, approveFriendRequest } = useChat()
   const { user, isAuthenticated } = useAuth()
+  const { t } = useLanguage()
   
   useEffect(() => {
     setMounted(true)
@@ -63,11 +65,11 @@ const Navigation = () => {
   }
 
   const navItems = [
-    { path: '/', icon: Home, label: '首页', isCustom: false },
-    { path: '/trace', icon: QrCode, label: '溯源', isCustom: false },
-    { path: '/gallery', icon: MapPin, label: '地区', isCustom: false },
-    { path: '/chat', icon: ChatIcon, label: '消息', isCustom: true },
-    { path: '/profile', icon: User, label: '我', isCustom: false },
+    { path: '/', icon: Home, label: t('nav.home'), isCustom: false },
+    { path: '/trace', icon: QrCode, label: t('nav.trace'), isCustom: false },
+    { path: '/gallery', icon: MapPin, label: t('nav.gallery'), isCustom: false },
+    { path: '/chat', icon: ChatIcon, label: t('nav.chat'), isCustom: true },
+    { path: '/profile', icon: User, label: t('nav.profile'), isCustom: false },
   ]
 
   const navContent = (
@@ -120,7 +122,7 @@ const Navigation = () => {
                   value={chatInput}
                   onChange={(e) => setChatInput(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-                  placeholder="输入消息..."
+                  placeholder={t('chat.placeholder')}
                   className="flex-1 bg-transparent text-sm md:text-base text-black dark:text-white placeholder:text-black/30 dark:placeholder:text-white/30 focus:outline-none"
                 />
                 <motion.button
@@ -297,7 +299,7 @@ const Navigation = () => {
             >
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-medium text-black dark:text-white">
-                  好友申请
+                  {t('chat.friendRequests')}
                 </h3>
                 <button
                   onClick={() => setShowRequestPanel(false)}
@@ -309,7 +311,7 @@ const Navigation = () => {
 
               {pendingRequests.length === 0 ? (
                 <div className="text-center py-8 text-black/50 dark:text-white/50 text-sm">
-                  暂无新的好友申请
+                  {t('chat.noFriendRequests')}
                 </div>
               ) : (
                 <div className="space-y-2">

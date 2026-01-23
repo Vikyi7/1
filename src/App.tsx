@@ -5,6 +5,7 @@ import ScrollToTop from './components/ScrollToTop'
 import AnimatedRoutes from './components/AnimatedRoutes'
 import { CreditProvider } from './contexts/CreditContext'
 import { ThemeProvider } from './contexts/ThemeContext'
+import { LanguageProvider } from './contexts/LanguageContext'
 import { TraceCodeProvider } from './contexts/TraceCodeContext'
 import { ChatProvider } from './contexts/ChatContext'
 import { AuthProvider } from './contexts/AuthContext'
@@ -15,11 +16,12 @@ function App() {
   
   return (
     <ThemeProvider>
-      <AuthProvider>
-        <CreditProvider>
-          <TraceCodeProvider>
-            <ChatProvider>
-              <Router basename={basename}>
+      <LanguageProvider>
+        <AuthProvider>
+          <CreditProvider>
+            <TraceCodeProvider>
+              <ChatProvider>
+                <Router basename={basename}>
                 <ScrollToTop />
           <div className="min-h-screen bg-white dark:bg-[#060606] text-black dark:text-white transition-colors duration-300" style={{ 
             position: 'fixed',
@@ -51,10 +53,11 @@ function App() {
             <Navigation />
           </div>
         </Router>
-              </ChatProvider>
-            </TraceCodeProvider>
-          </CreditProvider>
-        </AuthProvider>
+                </ChatProvider>
+              </TraceCodeProvider>
+            </CreditProvider>
+          </AuthProvider>
+        </LanguageProvider>
       </ThemeProvider>
     )
 }
