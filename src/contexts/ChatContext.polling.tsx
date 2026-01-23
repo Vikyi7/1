@@ -30,7 +30,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const [messages, setMessages] = useState<{ [friendId: string]: Message[] }>({})
   const [currentChatId, setCurrentChatId] = useState<string | null>(null)
   const [requests, setRequests] = useState<FriendRequest[]>([])
-  const isConnected = true // 轮询模式下始终为 true
+  const [isConnected] = useState(true) // 轮询模式下始终为 true
   const currentUserIdRef = useRef<string | null>(null)
   const pollingIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
