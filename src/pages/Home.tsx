@@ -1,9 +1,11 @@
 import { motion } from 'framer-motion'
 import { Sparkles, QrCode } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { useLanguage } from '../contexts/LanguageContext'
 
 const Home = () => {
   const navigate = useNavigate()
+  const { t } = useLanguage()
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -48,9 +50,9 @@ const Home = () => {
           >
             <div className="absolute inset-0 bg-black/5 dark:bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <QrCode className="mb-4 text-black/40 dark:text-white/40" size={32} />
-              <h3 className="text-xl font-medium mb-2 text-black dark:text-white">溯源码</h3>
+              <h3 className="text-xl font-medium mb-2 text-black dark:text-white">{t('home.trace.title')}</h3>
               <p className="text-black/50 dark:text-white/50 text-sm leading-relaxed">
-              扫描溯源码查看区块链存证信息
+              {t('home.trace.desc')}
             </p>
           </motion.div>
 
@@ -63,9 +65,9 @@ const Home = () => {
           >
             <div className="absolute inset-0 bg-black/5 dark:bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <Sparkles className="mb-4 text-black/40 dark:text-white/40" size={32} />
-            <h3 className="text-xl font-medium mb-2 text-black dark:text-white">地区</h3>
+            <h3 className="text-xl font-medium mb-2 text-black dark:text-white">{t('home.gallery.title')}</h3>
             <p className="text-black/50 dark:text-white/50 text-sm leading-relaxed">
-              探索莆田各区县的详细分类与特色
+              {t('home.gallery.desc')}
             </p>
           </motion.div>
 
@@ -78,9 +80,9 @@ const Home = () => {
           >
             <div className="absolute inset-0 bg-black/5 dark:bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <div className="w-8 h-8 mb-4 border-2 border-black/40 dark:border-white/40 rounded-full" />
-            <h3 className="text-xl font-medium mb-2 text-black dark:text-white">关于我们</h3>
+            <h3 className="text-xl font-medium mb-2 text-black dark:text-white">{t('home.about.title')}</h3>
             <p className="text-black/50 dark:text-white/50 text-sm leading-relaxed">
-              了解缘心福的设计理念
+              {t('home.about.desc')}
             </p>
           </motion.div>
         </div>

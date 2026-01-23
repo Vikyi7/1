@@ -2,11 +2,13 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import { useLanguage } from '../contexts/LanguageContext'
 import { Mail, Lock, User, ArrowRight, AlertCircle } from 'lucide-react'
 
 const Login = () => {
   const navigate = useNavigate()
   const { login, register, isAuthenticated } = useAuth()
+  const { t } = useLanguage()
   const [isLoginMode, setIsLoginMode] = useState(true)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -59,10 +61,10 @@ const Login = () => {
       if (result.success) {
         navigate('/profile')
       } else {
-        setError(result.error || '操作失败，请重试')
+        setError(result.error || t('login.error'))
       }
     } catch (err) {
-      setError('发生错误，请重试')
+      setError(t('login.errorOccurred'))
     } finally {
       setIsLoading(false)
     }
@@ -87,10 +89,10 @@ const Login = () => {
         {/* 标题 */}
         <motion.div variants={itemVariants} className="text-center mb-8">
           <h1 className="text-3xl font-light mb-2 text-black dark:text-white">
-            {isLoginMode ? '登录' : '注册'}
+            {isLoginMode ? t('login.title') : t('login.register')}
           </h1>
           <p className="text-sm text-black/50 dark:text-white/50">
-            {isLoginMode ? '欢迎回来' : '创建新账户'}
+            {isLoginMode ? t('login.welcome') : t('login.createAccount')}
           </p>
         </motion.div>
 
@@ -119,7 +121,7 @@ const Login = () => {
               exit={{ opacity: 0, height: 0 }}
             >
               <label className="block text-sm font-medium mb-2 text-black dark:text-white">
-                姓名
+                {t('login.name')}
               </label>
               <div className="relative">
                 <User
@@ -130,7 +132,7 @@ const Login = () => {
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="请输入您的姓名"
+                  placeholder={t('login.namePlaceholder')}
                   className="w-full pl-12 pr-4 py-3 border border-black/20 dark:border-white/20 rounded-xl bg-white dark:bg-[#060606] text-black dark:text-white placeholder:text-black/30 dark:placeholder:text-white/30 focus:outline-none focus:border-black/40 dark:focus:border-white/40 transition-colors"
                   required={!isLoginMode}
                 />
@@ -141,7 +143,7 @@ const Login = () => {
           {/* 邮箱输入 */}
           <div>
             <label className="block text-sm font-medium mb-2 text-black dark:text-white">
-              邮箱
+              {t('login.email')}
             </label>
             <div className="relative">
               <Mail
@@ -152,7 +154,7 @@ const Login = () => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="请输入邮箱地址"
+                placeholder={t('login.emailPlaceholder')}
                 className="w-full pl-12 pr-4 py-3 border border-black/20 dark:border-white/20 rounded-xl bg-white dark:bg-[#060606] text-black dark:text-white placeholder:text-black/30 dark:placeholder:text-white/30 focus:outline-none focus:border-black/40 dark:focus:border-white/40 transition-colors"
                 required
                 autoComplete="email"
@@ -163,7 +165,7 @@ const Login = () => {
           {/* 密码输入 */}
           <div>
             <label className="block text-sm font-medium mb-2 text-black dark:text-white">
-              密码
+              {t('login.password')}
             </label>
             <div className="relative">
               <Lock
@@ -174,7 +176,7 @@ const Login = () => {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder={isLoginMode ? '请输入密码' : '至少6个字符'}
+                placeholder={isLoginMode ? t('login.passwordPlaceholder') : t('login.passwordPlaceholderRegister')}
                 className="w-full pl-12 pr-4 py-3 border border-black/20 dark:border-white/20 rounded-xl bg-white dark:bg-[#060606] text-black dark:text-white placeholder:text-black/30 dark:placeholder:text-white/30 focus:outline-none focus:border-black/40 dark:focus:border-white/40 transition-colors"
                 required
                 autoComplete={isLoginMode ? 'current-password' : 'new-password'}
@@ -192,10 +194,10 @@ const Login = () => {
             className="w-full py-3 bg-black dark:bg-white text-white dark:text-black rounded-xl font-medium hover:bg-black/80 dark:hover:bg-white/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {isLoading ? (
-              <span className="text-sm">处理中...</span>
+              <span className="text-sm">{t('login.processing')}</span>
             ) : (
               <>
-                <span>{isLoginMode ? '登录' : '注册'}</span>
+                <span>{isLoginMode ? t('login.submit') : t('login.registerSubmit')}</span>
                 <ArrowRight size={18} />
               </>
             )}
@@ -210,13 +212,9 @@ const Login = () => {
             className="text-sm text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white transition-colors"
           >
             {isLoginMode ? (
-              <>
-                还没有账户？<span className="font-medium">立即注册</span>
-              </>
+              <>{t('login.switchToRegister')}</>
             ) : (
-              <>
-                已有账户？<span className="font-medium">立即登录</span>
-              </>
+              <>{t('login.switchToLogin')}</>
             )}
           </button>
         </motion.div>
@@ -227,7 +225,7 @@ const Login = () => {
             to="/"
             className="text-sm text-black/40 dark:text-white/40 hover:text-black/60 dark:hover:text-white/60 transition-colors"
           >
-            返回首页
+            {t('login.backToHome')}
           </Link>
         </motion.div>
       </motion.div>

@@ -1,22 +1,24 @@
 import { motion } from 'framer-motion'
 import { Heart, Sparkles, Zap } from 'lucide-react'
+import { useLanguage } from '../contexts/LanguageContext'
 
 const About = () => {
+  const { t } = useLanguage()
   const features = [
     {
       icon: Sparkles,
-      title: '极简设计',
-      description: '去除冗余，保留本质，每一根线条都经过精心设计',
+      title: t('about.feature1.title'),
+      description: t('about.feature1.desc'),
     },
     {
       icon: Zap,
-      title: '流畅交互',
-      description: '参考iOS设计规范，带来丝滑般的用户体验',
+      title: t('about.feature2.title'),
+      description: t('about.feature2.desc'),
     },
     {
       icon: Heart,
-      title: '艺术美学',
-      description: '在数字世界中寻找内心的宁静与平衡',
+      title: t('about.feature3.title'),
+      description: t('about.feature3.desc'),
     },
   ]
 
@@ -57,13 +59,13 @@ const About = () => {
           className="mb-16 space-y-6"
         >
           <p className="text-lg md:text-xl text-black/70 dark:text-white/70 font-light leading-relaxed max-w-3xl">
-            缘心福致力于运用<strong className="font-normal text-black/80 dark:text-white/80">区块链</strong>、<strong className="font-normal text-black/80 dark:text-white/80">数字资产（NFT）</strong>与<strong className="font-normal text-black/80 dark:text-white/80">社区共识（DAO）</strong>等Web3核心技术
+            {t('about.intro1')}<strong className="font-normal text-black/80 dark:text-white/80">{t('about.intro2')}</strong>{t('about.intro3')}<strong className="font-normal text-black/80 dark:text-white/80">{t('about.intro4')}</strong>{t('about.intro5')}<strong className="font-normal text-black/80 dark:text-white/80">{t('about.intro6')}</strong>{t('about.intro7')}
           </p>
           <p className="text-lg md:text-xl text-black/70 dark:text-white/70 font-light leading-relaxed whitespace-nowrap overflow-x-auto">
-            为福建深厚的特色产业（如工艺美术、鞋服制造、农产品、跨境贸易）构建可信的数字基石
+            {t('about.intro8')}
           </p>
           <p className="text-lg md:text-xl text-black/70 dark:text-white/70 font-light leading-relaxed max-w-3xl">
-            推动实体产业与数字经济的深度融合
+            {t('about.intro9')}
           </p>
         </motion.div>
 
@@ -93,12 +95,12 @@ const About = () => {
           className="p-10 md:p-12 border border-black/10 dark:border-white/10 rounded-2xl bg-white dark:bg-[#060606] transition-colors duration-300"
         >
           <div className="space-y-4">
-            <h2 className="text-2xl md:text-3xl font-light mb-6 text-black dark:text-white">设计理念</h2>
+            <h2 className="text-2xl md:text-3xl font-light mb-6 text-black dark:text-white">{t('about.designTitle')}</h2>
             <p className="text-base md:text-lg text-black/60 dark:text-white/60 leading-relaxed">
-              根源于莆阳，心之天下福。
+              {t('about.design1')}
             </p>
             <p className="text-base md:text-lg text-black/60 dark:text-white/60 leading-relaxed">
-              不止于根源，福于千万里，方为缘心福。
+              {t('about.design2')}
             </p>
           </div>
         </motion.div>
