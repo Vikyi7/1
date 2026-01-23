@@ -15,6 +15,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// 根路径用于快速验证服务是否可达（避免浏览器显示 Cannot GET /）
+app.get('/', (req, res) => {
+  res.status(200).send('OK');
+});
+
 // 数据存储文件 - 使用 /tmp 目录（Vercel 的临时目录）
 const DATA_DIR = process.env.VERCEL ? '/tmp/data' : path.join(__dirname, 'data');
 const USERS_FILE = path.join(DATA_DIR, 'users.json');
@@ -320,6 +325,9 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: Date.now() });
 });
 
-// 导出为 Vercel serverless function
-export default app;
+// 导出为 Vercel Serverless Function Handler
+// 注意：直接导出 express app 在部分环境会导致请求挂起；显式包装为 handler 更稳。
+export default function handler(req, res) {
+  return app(req, res);
+}
 
