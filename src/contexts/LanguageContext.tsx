@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 
-export type Language = 'zh-CN' | 'zh-TW' | 'en'
+export type Language = 'zh-CN' | 'en'
 
 interface LanguageContextType {
   language: Language
@@ -79,74 +79,29 @@ const translations: Record<Language, Record<string, string>> = {
     // 关于
     'about.title': '关于',
     'about.desc': '极简艺术应用',
-  },
-  'zh-TW': {
-    // 通用
-    'common.back': '返回',
-    'common.save': '儲存',
-    'common.cancel': '取消',
-    'common.confirm': '確認',
-    'common.delete': '刪除',
-    'common.edit': '編輯',
-    'common.close': '關閉',
-    
-    // 导航
-    'nav.home': '首頁',
-    'nav.about': '關於',
-    'nav.gallery': '圖庫',
-    'nav.trace': '溯源',
-    'nav.profile': '我的',
-    'nav.chat': '聊天',
-    
-    // 设置
-    'settings.title': '設定',
-    'settings.notifications': '通知',
-    'settings.notifications.desc': '接收應用通知和提醒',
-    'settings.darkMode': '深色模式',
-    'settings.darkMode.desc': '切換深色主題',
-    'settings.language': '語言',
-    'settings.language.desc': '選擇應用語言',
-    'settings.privacy': '隱私與安全',
-    'settings.privacy.desc': '管理隱私設定',
-    'settings.testCodes': '測試溯源码',
-    'settings.testCodes.desc': '生成測試用的溯源码（一物一碼）',
-    'settings.generateCodes': '生成 5 個測試碼',
-    'settings.about': '關於',
-    'settings.about.desc': '了解緣心福的設計理念',
-    'settings.version': '版本',
-    
-    // 登录
-    'login.title': '登入',
-    'login.register': '註冊',
-    'login.username': '使用者名稱',
-    'login.password': '密碼',
-    'login.confirmPassword': '確認密碼',
-    'login.submit': '登入',
-    'login.registerSubmit': '註冊',
-    'login.switchToRegister': '還沒有帳號？立即註冊',
-    'login.switchToLogin': '已有帳號？立即登入',
-    
-    // 个人资料
-    'profile.title': '個人資料',
-    'profile.edit': '編輯資料',
-    'profile.friends': '好友',
-    'profile.settings': '設定',
-    
-    // 聊天
-    'chat.title': '聊天',
-    'chat.send': '發送',
-    'chat.placeholder': '輸入訊息...',
-    'chat.noMessages': '還沒有訊息',
-    'chat.friendRequests': '好友申請',
-    'chat.noFriendRequests': '暫無新的好友申請',
+    'about.feature1.title': '极简设计',
+    'about.feature1.desc': '去除冗余，保留本质，每一根线条都经过精心设计',
+    'about.feature2.title': '流畅交互',
+    'about.feature2.desc': '参考iOS设计规范，带来丝滑般的用户体验',
+    'about.feature3.title': '艺术美学',
+    'about.feature3.desc': '在数字世界中寻找内心的宁静与平衡',
     
     // 首页
-    'home.welcome': '歡迎',
-    'home.explore': '探索',
+    'home.trace.title': '溯源查询',
+    'home.trace.desc': '一物一码，追溯产品来源',
+    'home.gallery.title': '地区探索',
+    'home.gallery.desc': '发现莆田地区的文化特色',
     
-    // 关于
-    'about.title': '關於',
-    'about.desc': '極簡藝術應用',
+    // 个人资料
+    'profile.logout': '退出登录',
+    'profile.credits': '积分',
+    'profile.email': '邮箱',
+    
+    // 错误信息
+    'error.required': '此字段为必填项',
+    'error.passwordMismatch': '两次输入的密码不一致',
+    'error.loginFailed': '登录失败，请检查用户名和密码',
+    'error.registerFailed': '注册失败，请稍后重试',
   },
   'en': {
     // 通用
@@ -215,6 +170,29 @@ const translations: Record<Language, Record<string, string>> = {
     // 关于
     'about.title': 'About',
     'about.desc': 'Minimalist Art App',
+    'about.feature1.title': 'Minimalist Design',
+    'about.feature1.desc': 'Remove redundancy, preserve essence, every line is carefully designed',
+    'about.feature2.title': 'Smooth Interaction',
+    'about.feature2.desc': 'Following iOS design guidelines for a silky smooth user experience',
+    'about.feature3.title': 'Artistic Aesthetics',
+    'about.feature3.desc': 'Finding inner peace and balance in the digital world',
+    
+    // 首页
+    'home.trace.title': 'Trace Query',
+    'home.trace.desc': 'One code per item, trace product origin',
+    'home.gallery.title': 'Regional Exploration',
+    'home.gallery.desc': 'Discover the cultural characteristics of Putian',
+    
+    // 个人资料
+    'profile.logout': 'Logout',
+    'profile.credits': 'Credits',
+    'profile.email': 'Email',
+    
+    // 错误信息
+    'error.required': 'This field is required',
+    'error.passwordMismatch': 'Passwords do not match',
+    'error.loginFailed': 'Login failed, please check your username and password',
+    'error.registerFailed': 'Registration failed, please try again later',
   },
 }
 
@@ -222,7 +200,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguageState] = useState<Language>(() => {
     // 从 localStorage 读取保存的语言设置
     const saved = localStorage.getItem('language') as Language
-    return saved && ['zh-CN', 'zh-TW', 'en'].includes(saved) ? saved : 'zh-CN'
+    return saved && ['zh-CN', 'en'].includes(saved) ? saved : 'zh-CN'
   })
 
   // 保存语言设置到 localStorage
