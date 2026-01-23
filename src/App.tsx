@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { Analytics } from '@vercel/analytics/react'
 import Home from './pages/Home'
 import About from './pages/About'
 import Gallery from './pages/Gallery'
@@ -66,6 +67,7 @@ function App() {
             </main>
             <Navigation />
           </div>
+          <Analytics />
         </Router>
               </ChatProvider>
             </TraceCodeProvider>

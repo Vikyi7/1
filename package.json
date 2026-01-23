@@ -19,6 +19,7 @@
     "android:build": "npm run android:sync && npm run android:open"
   },
   "dependencies": {
+    "@vercel/analytics": "^1.6.1",
     "framer-motion": "^10.16.16",
     "html5-qrcode": "^2.3.8",
     "lucide-react": "^0.294.0",
