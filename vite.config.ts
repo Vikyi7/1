@@ -4,8 +4,8 @@ import { VitePWA } from 'vite-plugin-pwa'
 import mkcert from 'vite-plugin-mkcert'
 
 export default defineConfig({
-  // Vercel 使用根路径，GitHub Pages 使用 /-/，Capacitor 使用 /
-  base: process.env.CAPACITOR ? '/' : (process.env.VERCEL ? '/' : (process.env.NODE_ENV === 'production' ? '/-/' : '/')),
+  // Vercel 使用根路径，GitHub Pages 使用 /1/，Capacitor 使用 /
+  base: process.env.CAPACITOR ? '/' : (process.env.VERCEL ? '/' : (process.env.NODE_ENV === 'production' ? '/1/' : '/')),
   plugins: [
     react(),
     mkcert(), // 启用 HTTPS
@@ -20,8 +20,8 @@ export default defineConfig({
         background_color: '#ffffff',
         display: 'standalone',
         orientation: 'portrait',
-        start_url: '/-/',
-        scope: '/-/',
+        start_url: '/1/',
+        scope: '/1/',
         icons: [
           {
             src: 'vite.svg',
@@ -45,7 +45,7 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
-        navigateFallback: '/-/index.html',
+        navigateFallback: '/1/index.html',
         navigateFallbackDenylist: [/^\/_/, /\/[^/?]+\.[^/]+$/]
       }
     })
