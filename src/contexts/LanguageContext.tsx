@@ -25,7 +25,7 @@ const translations: Record<Language, Record<string, string>> = {
     // 导航
     'nav.home': '首页',
     'nav.about': '关于',
-    'nav.gallery': '图库',
+    'nav.gallery': '地区',
     'nav.trace': '溯源',
     'nav.profile': '我的',
     'nav.chat': '聊天',
@@ -239,7 +239,7 @@ const translations: Record<Language, Record<string, string>> = {
     // 导航
     'nav.home': 'Home',
     'nav.about': 'About',
-    'nav.gallery': 'Gallery',
+    'nav.gallery': 'Region',
     'nav.trace': 'Trace',
     'nav.profile': 'Profile',
     'nav.chat': 'Chat',
